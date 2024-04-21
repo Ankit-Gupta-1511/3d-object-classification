@@ -46,14 +46,14 @@ if __name__ == '__main__':
     save_path = 'output/model_weights.pth'
     batch_size = 4
     n_points = 1024
-    num_epochs = 50
+    num_epochs = 100
 
     model = PointNet(output_classes=10)
     if torch.cuda.is_available():
         model.cuda()
 
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters(), lr=0.001)
+    optimizer = optim.Adam(model.parameters(), lr=0.0001)
 
 
     train_loader = get_dataloaders(root_dir=root_dir, batch_size=batch_size, n_points=n_points)
