@@ -6,10 +6,11 @@ from torch.utils.data import Dataset, DataLoader
 from torch import nn
 import torch.nn.functional as F
 import torch.optim as optim
+from torchviz import make_dot
 
 from utils.data_preprocessing import ModelNet10Dataset
 
-from model.PointNet import PointNet
+from model.PointNetSequential import PointNet
 
 # Data Loaders
 def get_dataloaders(root_dir, batch_size=4, n_points=1024):
@@ -35,6 +36,9 @@ def eval_model(model, test_loader, criterion, optimizer):
                 correct += (predicted == labels).sum().item()
 
         print(f' Val Loss: {total_val_loss / len(test_loader)}, Accuracy: {correct / len(test_loader.dataset)}')
+        dot = make_dot(outputs, params=dict(model.named_parameters()))
+
+        dot.render('output/model_architecture', format='png')
 
 
 def load_model(model, path):
@@ -63,6 +67,8 @@ if __name__ == '__main__':
     load_model(model, save_path)
     # Run the training loop
     eval_model(model, test_loader, criterion, optimizer)
+
+    
 
 
 

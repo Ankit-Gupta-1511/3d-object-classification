@@ -5,10 +5,11 @@ from torch.utils.data import Dataset, DataLoader
 from torch import nn
 import torch.nn.functional as F
 import torch.optim as optim
+from torchviz import make_dot
 
 from utils.data_preprocessing import ModelNet10Dataset
 
-from model.PointNet import PointNet
+from model.PointNetSequential import PointNet
 
 # Data Loaders
 def get_dataloaders(root_dir, batch_size=4, n_points=1024):
@@ -32,6 +33,9 @@ def train_model(model, train_loader, criterion, optimizer, num_epochs=10):
             total_train_loss += loss.item()
 
         print(f'Epoch {epoch+1}, Train Loss: {total_train_loss / len(train_loader)}')
+        dot = make_dot(outputs, params=dict(model.named_parameters()))
+
+        dot.render('output/model_architecture', format='png')
 
 
 def save_model(model, path):
