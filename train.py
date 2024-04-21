@@ -34,13 +34,19 @@ def train_model(model, train_loader, criterion, optimizer, num_epochs=10):
         print(f'Epoch {epoch+1}, Train Loss: {total_train_loss / len(train_loader)}')
 
 
+def save_model(model, path):
+    torch.save(model.state_dict(), path)
+    print(f"Model saved to {path}")
+
+
 
 if __name__ == '__main__':
 
     root_dir = 'data'
+    save_path = 'output/model_weights.pth'
     batch_size = 4
     n_points = 1024
-    num_epochs = 10
+    num_epochs = 50
 
     model = PointNet(output_classes=10)
     if torch.cuda.is_available():
@@ -54,3 +60,4 @@ if __name__ == '__main__':
 
     # Run the training loop
     train_model(model, train_loader, criterion, optimizer, num_epochs=num_epochs)
+    save_model(model, save_path)
